@@ -1,30 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Pop-up Example</title>
+    <title>산양 폐사 데이터 분석</title>
     <style>
         .popup {
             display: none;
             position: absolute;
             background-color: white;
             border: 1px solid #ccc;
-            padding: 10px;
+            padding: 15px;
             z-index: 10;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            border-radius: 5px;
         }
         .link {
-            color: blue;
+            color: #2962FF;
             cursor: pointer;
             text-decoration: underline;
+            margin: 5px 0;
+            display: block;
+        }
+        .link:hover {
+            color: #0039CB;
+        }
+        .section {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+        }
+        h2 {
+            color: #1976D2;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
 
-<h1>Interactive Pop-up Example</h1>
-<p>Click on the <span class="link" data-info="This is additional information about the word 'example'.">example</span> to see more information.</p>
+<div class="section">
+    <span class="link" data-info="무엇이 산양을 죽게 만든 걸까요? YTN 데이터랩은 산양 집단폐사 사건의 흔적을 데이터로 추적해 복원해보았습니다. 산양 폐사와 관련된 국내 최초의 인터랙티브 지도입니다.">1. 조사 개요</span>
+
+    <span class="link" data-info="YTN 데이터랩은 2013년부터 2024년까지 야생 산양 1379마리의 폐사 기록을 바탕으로 지도를 만들었습니다. 2023년 11월부터 2025년 5월까지 폐사한 산양 중 위치정보가 식별 가능한 개체 951마리, 705곳의 폐사 지점을 지도에 시각화했습니다.">2. 데이터 수집 방법</span>
+
+    <span class="link" data-info="아울러 역대급 집단폐사의 주요 원인으로 지목된 폭설의 영향과 서식처를 분절시켰다는 아프리카 돼지열병(ASF) 차단 울타리의 위치도 표시했습니다. ASF 차단 울타리는 2019년 ASF 출현 당시 농촌 마을 위주로 초기에 먼저 설치한 2차 울타리와 지자체 단위로 설치한 2차 울타리, 중앙정부 차원에서 만든 3차 광역 울타리로 나뉩니다.">3. ASF 차단 울타리 현황</span>
+
+    <span class="link" data-info="YTN 데이터랩은 울타리의 대부분을 차지하며 특히 산양 서식지에 집중 분포된 2차 울타리와 3차 울타리 파일을 GIS 지도로 제작했습니다. 광역 울타리는 정부 파일을 입수했지만, 2차 울타리 위치는 정부나 지자체나 체계적으로 전자화된 파일이 없는 곳이 대부분이었습니다.">4. 지도 제작 과정</span>
+
+    <span class="link" data-info="설악산 국립공원 10km이내에서 발견된 241개체의 사체 중 49% 즉 절반 가까이가 울타리의 영향을 받았을 가능성이 있는 것으로 분석했습니다. 즉 고지대에서 내려와 폭설 속에 먹이를 찾아 헤매던 산양이 서식지를 가로지르는 차단 울타리에 막혀 더 이상 이동을 못하고 탈진했을 가능성입니다.">5. 분석 결과</span>
+</div>
 
 <div id="popup" class="popup"></div>
 
@@ -38,8 +64,25 @@
                 const info = this.getAttribute('data-info');
                 popup.textContent = info;
                 popup.style.display = 'block';
-                popup.style.left = event.pageX + 'px';
-                popup.style.top = event.pageY + 'px';
+                
+                // 팝업이 화면 밖으로 나가지 않도록 위치 조정
+                const rect = this.getBoundingClientRect();
+                const popupHeight = popup.offsetHeight;
+                const popupWidth = popup.offsetWidth;
+                
+                let top = event.pageY + 10;
+                let left = event.pageX;
+
+                if (top + popupHeight > window.innerHeight) {
+                    top = event.pageY - popupHeight - 10;
+                }
+                
+                if (left + popupWidth > window.innerWidth) {
+                    left = window.innerWidth - popupWidth - 10;
+                }
+
+                popup.style.left = left + 'px';
+                popup.style.top = top + 'px';
             });
         });
 
