@@ -20,7 +20,7 @@
             color: #2962FF;
             cursor: pointer;
             text-decoration: underline;
-            margin: 5px 0;
+            margin: 15px 0; /* Increased margin for more space */
             display: block;
         }
         .link:hover {
@@ -65,16 +65,16 @@
                 popup.textContent = info;
                 popup.style.display = 'block';
                 
-                // 팝업이 화면 밖으로 나가지 않도록 위치 조정
+                // Position the popup to the right of the clicked link
                 const rect = this.getBoundingClientRect();
                 const popupHeight = popup.offsetHeight;
                 const popupWidth = popup.offsetWidth;
                 
-                let top = event.pageY + 10;
-                let left = event.pageX;
+                let top = rect.top + window.scrollY;
+                let left = rect.right + 10; // Position to the right of the link
 
                 if (top + popupHeight > window.innerHeight) {
-                    top = event.pageY - popupHeight - 10;
+                    top = window.innerHeight - popupHeight - 10;
                 }
                 
                 if (left + popupWidth > window.innerWidth) {
